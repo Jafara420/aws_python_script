@@ -1,5 +1,5 @@
 import argparse
-from s3.buckets import list_buckets, create_bucket, delete_bucket
+from s3.crud import list_buckets, create_bucket, delete_bucket
 
 """
 THIS IS A PYTHON SCRIPT WHICH INTERACTS WITH AWS SERVICES, CURRENTLY S3, LATER ON LAMBDA, EC2 AND SO ON
