@@ -1,35 +1,8 @@
 import argparse
 from s3.crud import list_buckets, create_bucket, delete_bucket
+from s3.magic import upload_file_by_type
 
-"""
-THIS IS A PYTHON SCRIPT WHICH INTERACTS WITH AWS SERVICES, CURRENTLY S3, LATER ON LAMBDA, EC2 AND SO ON
-       .--.
-      |o_o |
-      |:_/ |
-     //   \ \
-    (|     | )
-   /'\_   _/`\
-   \___)=(___/
-
-    A     W   W   SSSSS
-   A A    W   W  S
-  AAAAA   W W W  SSSSS
- A     A  WW WW      S
-A       A W   W  SSSSS
-
-
-CURRENTLY SUPPORTED AWS SERVICES:
-- S3: Simple Storage Service
-
-CURRENT CLI COMMANDS:
-- list-buckets: List all S3 buckets in your AWS account
-- create-bucket: Create a new S3 bucket, add --name tag to specify the bucket name
-- delete-bucket: Delete an S3 bucket, add --name tag to specify the bucket name
-
-
-
-
-"""
+# This script provides a command-line interface for managing AWS S3 buckets and files.
 
 def main():
     parser = argparse.ArgumentParser(
@@ -67,7 +40,18 @@ def main():
         "--name", required=True, help="The name of the bucket to delete"
     )
 
-
+    # Upload file in bucket command
+    upload_parser = subparsers.add_parser(
+        "upload-file",
+        help="Upload a file to an S3 bucket, input bucket name with --bucket and file path with --file"
+    )
+    upload_parser.add_argument(
+        "--bucket-name", required=True, help="The name of the bucket to upload to"
+    )
+    upload_parser.add_argument(
+        "--file", required=True, help="The path to the file to upload"
+    )
+   
 
 
     args = parser.parse_args()
@@ -97,6 +81,14 @@ def main():
             print("Bucket name is required.")
             exit(1)
         response = delete_bucket(args.name)
+
+    elif args.command == "upload-file":
+        if not args.bucket_name or not args.file:
+            print("Bucket name and file path are required.")
+            exit(1)
+        response = upload_file_by_type(args.bucket_name, args.file)
+        if response:
+            print(f"File {args.file} uploaded to bucket {args.bucket_name} successfully.")
     else:
         parser.print_help()
         exit(1)

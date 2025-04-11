@@ -9,7 +9,7 @@ def init_client():
     "s3",
     aws_access_key_id=os.getenv("aws_access_key_id"),
     aws_secret_access_key=os.getenv("aws_secret_access_key"),
-    # aws_session_token=getenv("aws_session_token"),
+    # aws_session_token=os.getenv("aws_session_token"),
     # region_name=os.getenv("aws_region_name")
     #  config=botocore.client.Config(
     #      connect_timeout=conf.remote_cfg["remote_timeout"],
